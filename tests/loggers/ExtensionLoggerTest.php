@@ -101,6 +101,6 @@ class ExtensionLoggerTest extends TestCase
         }
 
         $item->log('emergency', 'log', []);
-        $this->assertEquals(['emergency', 'log'], BufferLogger::$log[$level]);
+        $this->assertEquals(['emergency', 'log'], BufferLogger::$log['emergency']);
     }
 }
