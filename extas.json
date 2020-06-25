@@ -1,33 +1,20 @@
 {
   "name": "extas/loggers",
   "installer_version": 3,
-  "package_classes": [
+  "repositories": [
     {
-      "interface": "",
-      "class": ""
+      "name": "loggers",
+      "scope": "extas",
+      "pk": "name",
+      "class": "extas\\components\\loggers\\Logger",
+      "aliases": ["loggers"]
     }
   ],
   "plugins_install": [
     {
-      "repository": "",
-      "name": "",
-      "section": ""
-    }
-  ],
-  "plugins": [
-    {
-      "class": "",
-      "stage": "",
-      "priority": 0,
-      "parameters": {}
-    }
-  ],
-  "extensions": [
-    {
-      "class": "extas\\components\\extensions\\ExtensionRepositoryGet",
-      "interface": "extas\\interfaces\\extensions\\IExtensionRepositoryGet",
-      "subject": "*",
-      "methods": []
+      "repository": "loggers",
+      "name": "logger",
+      "section": "loggers"
     }
   ]
 }
