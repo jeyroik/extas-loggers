@@ -12,6 +12,7 @@ use extas\components\plugins\TSnuffPlugins;
 use extas\components\repositories\RepositoryDescription;
 use extas\components\repositories\RepositoryDescriptionRepository;
 use extas\components\repositories\TSnuffRepository;
+use extas\interfaces\extensions\IExtensionLogger;
 use extas\interfaces\extensions\IExtensionRepositoryDescription;
 
 use Dotenv\Dotenv;
@@ -74,7 +75,7 @@ class ExtensionLoggerTest extends TestCase
     public function testLevels()
     {
         /**
-         * @var LoggerInterface $item
+         * @var IExtensionLogger $item
          */
         $item = new class extends Item {
             protected function getSubjectForExtension(): string
@@ -88,11 +89,11 @@ class ExtensionLoggerTest extends TestCase
         ];
 
         foreach ($levels as $level) {
-            $item->$level($level);
+            $item->$level($level, []);
             $this->assertEquals([$level], BufferLogger::$log[$level]);
         }
 
-        $item->log('emergency', 'log');
+        $item->log('emergency', 'log', []);
         $this->assertEquals(['emergency', 'log'], BufferLogger::$log[$level]);
     }
 }
