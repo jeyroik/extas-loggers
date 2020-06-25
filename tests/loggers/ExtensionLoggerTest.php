@@ -11,7 +11,8 @@ use extas\components\loggers\Logger;
 use extas\components\plugins\TSnuffPlugins;
 use extas\components\repositories\RepositoryDescription;
 use extas\components\repositories\RepositoryDescriptionRepository;
-use extas\components\repositories\TSnuffRepository;
+use extas\components\repositories\TSnuffRepositoryDynamic;
+use extas\components\THasMagicClass;
 use extas\interfaces\extensions\IExtensionLogger;
 use extas\interfaces\extensions\IExtensionRepositoryDescription;
 
@@ -29,17 +30,18 @@ use tests\BufferLogger;
 class ExtensionLoggerTest extends TestCase
 {
     use TSnuffConsole;
-    use TSnuffRepository;
+    use TSnuffRepositoryDynamic;
     use TSnuffPlugins;
+    use THasMagicClass;
 
     protected function setUp(): void
     {
         parent::setUp();
         $env = Dotenv::create(getcwd() . '/tests/');
         $env->load();
-        $this->registerSnuffRepos([
-            'extensionRepository' => ExtensionRepository::class,
-            'repositories' => RepositoryDescriptionRepository::class
+
+        $this->createSnuffDynamicRepositories([
+            ['loggers', 'name', Logger::class]
         ]);
 
         $this->createWithSnuffRepo('extensionRepository', new Extension([
@@ -48,28 +50,28 @@ class ExtensionLoggerTest extends TestCase
             Extension::FIELD__SUBJECT => 'test',
             Extension::FIELD__METHODS => [
                 'emergency', 'alert', 'critical', 'warning', 'error', 'notice', 'info', 'debug', 'log'
+            ],
+            /**
+             * Проверка применяется ли фильтр к списку логгеров по параметрам расширения.
+             */
+            Extension::FIELD__PARAMETERS => [
+                'tags' => [
+                    'name' => 'tags',
+                    'value' => 'test'
+                ]
             ]
         ]));
 
-        $this->createWithSnuffRepo('extensionRepository', new Extension([
-            Extension::FIELD__CLASS => ExtensionRepositoryDescription::class,
-            Extension::FIELD__INTERFACE => IExtensionRepositoryDescription::class,
-            Extension::FIELD__SUBJECT => '*',
-            Extension::FIELD__METHODS => ['loggers']
-        ]));
-
-        $this->createWithSnuffRepo('repositories', new RepositoryDescription([
-            RepositoryDescription::FIELD__NAME => 'loggers',
-            RepositoryDescription::FIELD__SCOPE => 'extas',
-            RepositoryDescription::FIELD__PRIMARY_KEY => 'name',
-            RepositoryDescription::FIELD__CLASS => Logger::class,
-            RepositoryDescription::FIELD__ALIASES => ['loggers']
+        $this->getMagicClass('loggers')->create(new Logger([
+            Logger::FIELD__NAME => 'buffered',
+            Logger::FIELD__CLASS => BufferLogger::class,
+            Logger::FIELD__TAGS => ['test']
         ]));
     }
 
     protected function tearDown(): void
     {
-        $this->unregisterSnuffRepos();
+        $this->deleteSnuffDynamicRepositories();
     }
 
     public function testLevels()

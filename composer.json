@@ -15,7 +15,8 @@
     "jeyroik/extas-repositories-mongo": "1.*",
     "phpstan/phpstan": "0.*",
     "jeyroik/extas-snuffbox": "0.*",
-    "jeyroik/extas-snuffbox-installer": "0.*"
+    "jeyroik/extas-snuffbox-installer": "0.*",
+    "jeyroik/extas-snuffbox-repositories": "0.*"
   },
   "autoload": {
     "psr-4": {
