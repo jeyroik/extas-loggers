@@ -44,7 +44,7 @@ class ExtensionLoggerTest extends TestCase
         $this->createWithSnuffRepo('extensionRepository', new Extension([
             Extension::FIELD__CLASS => ExtensionLogger::class,
             Extension::FIELD__INTERFACE => LoggerInterface::class,
-            Extension::SUBJECT => 'test',
+            Extension::FIELD__SUBJECT => 'test',
             Extension::FIELD__METHODS => [
                 'emergency', 'alert', 'critical', 'warning', 'error', 'notice', 'info', 'debug', 'log'
             ]
@@ -53,7 +53,7 @@ class ExtensionLoggerTest extends TestCase
         $this->createWithSnuffRepo('extensionRepository', new Extension([
             Extension::FIELD__CLASS => ExtensionRepositoryDescription::class,
             Extension::FIELD__INTERFACE => IExtensionRepositoryDescription::class,
-            Extension::SUBJECT => '*',
+            Extension::FIELD__SUBJECT => '*',
             Extension::FIELD__METHODS => ['loggers']
         ]));
 
