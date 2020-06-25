@@ -90,6 +90,11 @@ class ExtensionLoggerTest extends TestCase
 
         foreach ($levels as $level) {
             $item->$level($level, []);
+            $this->assertArrayHasKey(
+                $level,
+                BufferLogger::$log,
+                'Missed "' . $level . '": ' . print_r(BufferLogger::$log, true)
+            );
             $this->assertEquals([$level], BufferLogger::$log[$level]);
         }
 
